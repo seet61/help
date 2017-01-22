@@ -1,0 +1,53 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <div class="row">
+        <h5>Укажите временной промежуток:</h5>
+        <!--
+        <blockquote>
+          Фильтр грубый. Для того что бы получить данные за 29 надо выбрать диамазон с 28 по 30.
+        </blockquote>
+        -->
+        {% if dates == 1 %}
+            <script>
+              Materialize.toast('Не выбраны даты фильтра!', 4000);
+            </script>
+        {% endif %}
+        <form class="col s12" id="form" action="{% url 'tasks:list_over_time' %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+        		<div class="col s2">
+        			<label for="calendar_start">Дата начала</label>
+        			<input id="calendar_start" name="calendar_start" type="date" class="datepicker" value="{{ request.POST.calendar_start }}">
+        		</div>
+        		<div class="col s2">
+        			<label for="calendar_end">Дата окончания</label>
+        			<input id="calendar_end" name="calendar_end" type="date" class="datepicker" value="{{ request.POST.calendar_end }}">
+        		</div>
+            </div>
+            <div class="row">
+        		<div class="col s2">
+        			<button class="btn waves-effect waves-light green left tooltipped" 
+                        type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
+                        <i class="material-icons">send</i>
+                    </button>
+            	</div>
+        	</div>
+        </form>
+
+        <ul>
+        {% for e in entries %}
+        		<li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
+        {% endfor %}
+        </ul>
+
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

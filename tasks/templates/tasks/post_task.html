@@ -1,0 +1,56 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <h5>Добавить активность</h5>
+        {% if task_saved == 1 %}
+            <script>
+              Materialize.toast('Запись добавлена.', 4000);
+            </script>
+        {% elif task_saved == 0 %}
+            <script>
+              Materialize.toast('Запись не добавлена.', 4000);
+            </script>
+        {% elif task_saved == 2 %}
+            <script>
+              Materialize.toast('Запись с таким номер для вашего логина уже существует.', 4000);
+            </script>
+        {% endif %}
+        <div class="row">
+            <form class="col s12" id="form" action="{% url 'tasks:post_task' %}" method="post">
+            <!-- type="submit" если без проверки на стороне js-->
+            {% csrf_token %}
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="number" name="number" type="text" class="validate" value="{{ request.POST.number }}" length="8">
+                        <label for="number">Номер</label>
+                    </div>
+                    <div class="col s2">
+                    <label for="calendar">Дата</label>
+                        <input id="calendar" name="calendar" type="date" class="datepicker" value="{{ request.POST.calendar }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="comment" name="comment" class="materialize-textarea" value="{{ request.POST.comment }}"></textarea>
+                        <label for="comment">Комментарий</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light green right tooltipped" type="submit" name="action"
+                        data-position="bottom" data-delay="50" data-tooltip="Добавить?">
+                        <i class="material-icons">note_add</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+
+{% endblock %}

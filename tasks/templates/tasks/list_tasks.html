@@ -1,0 +1,109 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <div class="row">
+        <h5>Укажите временной промежуток:</h5>
+        {% if error == 1 %}
+            <script>
+              Materialize.toast('Не выбраны даты фильтра!', 4000);
+            </script>
+        {% elif error == 2 %}
+            <script>
+              Materialize.toast('Не задан фильтр поиска!', 4000);
+            </script>
+        {% elif error == 3 %}
+            <script>
+              Materialize.toast('Ничего не найдено.', 4000);
+            </script>
+        {% endif %}
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s3"><a href="#all_tasks">Найти по фильтру даты</a></li>
+                    <li class="tab col s3"><a href="#search_tasks">Найти по описанию</a></li>
+                </ul>
+            </div>
+            <div id="all_tasks" class="col s12">
+                <form class="col s12" id="form" action="{% url 'tasks:list_tasks' %}" method="post">
+                {% csrf_token %}
+                    <div class="row">
+                        <div class="col s2">
+                            <label for="calendar">Дата начала</label>
+                            <input id="calendar_start" name="calendar_start" type="date" class="datepicker" value="{{ request.POST.calendar_start }}">
+                        </div>
+                        <div class="col s2">
+                            <label for="calendar">Дата окончания</label>
+                            <input id="calendar_end" name="calendar_end" type="date" class="datepicker" value="{{ request.POST.calendar_end }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s4">
+                            <button class="btn waves-effect waves-light green center tooltipped" 
+                                type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
+                                <i class="material-icons">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="search_tasks" class="col s12">
+                <form class="col s12" id="form" action="{% url 'tasks:search_tasks' %}" method="post">
+                {% csrf_token %}
+                    <div class="row">
+                        <div class="input-field col s10">
+                            <input id="criterion" name="criterion" type="text" class="validate" value="{{ request.POST.criterion }}" length="50">
+                            <label for="criterion">Критерий поиска</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s4">
+                            <button class="btn waves-effect waves-light green center tooltipped" 
+                                type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
+                                <i class="material-icons">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+
+        <ul>
+        {% if changes %}
+            <label>ОД и Работы:</label>
+            {% for e in changes %}
+        	   <li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
+            {% endfor %}
+        {% endif %}
+        {% if queries %}
+            <br>
+            <label>Запросы:</label>
+            {% for e in queries %}
+               <li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
+            {% endfor %}
+        {% endif %}
+        {% if others %}
+            <br>
+            <label>Прочее:</label>
+            {% for e in others %}
+               <li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
+            {% endfor %}
+        {% endif %}
+        {% if entries %}
+            <label>Результат:</label>
+            {% for e in entries %}
+        	   <li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
+            {% endfor %}
+        {% endif %}
+        </ul>
+
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

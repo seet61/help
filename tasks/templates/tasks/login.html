@@ -1,0 +1,52 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <div class="row">
+          <h5>Необходимо авторизоваться.</h5>
+          {% if invalid_data %}
+            <script>
+              Materialize.toast('Введен не правильный логин или пароль!', 4000)
+            </script>
+          {% elif disabled_acc %}
+            <script>
+              Materialize.toast('Ваш аккаунт заблокирован.', 4000)
+            </script>
+          {% elif bad_session %}
+            <script>
+              Materialize.toast('У Вас не было сессии.', 4000)
+            </script>
+          {% elif enable_cookies %}
+            <script>
+              Materialize.toast('Активируйте cookie и повторите попытку снова.', 4000)
+            </script>
+          {% endif %}
+        </div>
+        <div class="row">
+          <form class="col s12" method="post" action="{% url 'tasks:login' %}">
+            {% csrf_token %}
+            <div class="row">
+              <div class="input-field col s6">
+                <input id="username" name='username' type="text" class="validate" value="{{ request.POST.username }}">
+                <label for="username">Логин</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s6">
+                <input id="password" name='password' type="password" class="validate">
+                <label for="password">Пароль</label>
+              </div>
+            </div>
+              <button class="btn waves-effect waves-light green" type="submit" name="action">Войти<i class="material-icons right">send</i>
+            </button>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <div class="row">
+        <h5>Добавить переработку</h5>
+        <!--
+        <blockquote>
+          Фильтр грубый. Для того что бы получить данные за 29 надо выбрать диамазон с 28 по 30.
+        </blockquote>
+        -->
+        {% if entry_saved == 1 %}
+            <script>
+              Materialize.toast('Запись добавлена.', 4000)
+            </script>
+        {% elif entry_saved == 0 %}
+            <script>
+              Materialize.toast('Запись не добавлена', 4000)
+            </script>
+        {% endif %}
+        <form class="col s12" id="form" action="{% url 'tasks:over_time' %}" method="post">
+            {% csrf_token %}
+        	<div class="row">
+                    <div class="col s2">
+                    <label for="calendar">Дата</label>
+                        <input id="calendar" name="calendar" type="date" class="datepicker" value="{{ request.POST.calendar }}">
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="comment" name="comment" class="materialize-textarea" value="{{ request.POST.comment }}"></textarea>
+                            <label for="comment">Комментарий</label>
+                        </div>
+                    </div>
+                    <div class="col s2">
+                        <button class="btn waves-effect waves-light green left tooltipped" type="submit" name="action"
+                            data-position="bottom" data-delay="50" data-tooltip="Добавить?">
+                            <i class="material-icons">note_add</i>
+                        </button>
+                    </div>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

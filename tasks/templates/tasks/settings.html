@@ -1,0 +1,75 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <div class="row">
+        	{% if password_changed %}
+            	<script>
+              		Materialize.toast('Пароль был изменен.', 4000);
+            	</script>
+            {% elif bad_data %}
+            	<script>
+              		Materialize.toast('Не корректные данные для смены пароля.', 4000);
+            	</script>
+            {% elif bad_confirm %}
+            	<script>
+              		Materialize.toast('Введены парли не совпадают.', 4000);
+            	</script>
+            {% endif %}
+
+            <!-- Modal Trigger -->
+            <div class="row">
+  				<a class="waves-effect waves-light green btn modal-trigger" href="#password">Сменить пароль</a>
+  			</div>
+
+  			<!-- Modal Structure -->
+  			<div id="password" class="modal">
+  				<form class="col s12" id="form" action="{% url 'tasks:change_password' %}" method="post">
+      				{% csrf_token %}
+    				<div class="modal-content">
+      					<div class="row">
+        					<div class="input-field col s6">
+          						<input id="current_password" name="current_password" type="password" class="validate">
+          						<label for="current_password">Старый пароль</label>
+        					</div>
+      					</div>
+      					<div class="row">
+        					<div class="input-field col s6">
+          						<input id="new_password" name="new_password" type="password" class="validate">
+          						<label for="new_password">Новый пароль</label>
+        					</div>
+        					<div class="input-field col s6">
+          						<input id="confirm_password" name="confirm_password" type="password" class="validate">
+          						<label for="confirm_password">Повторите пароль</label>
+        					</div>
+      					</div>
+    				</div>
+    				<div class="modal-footer">
+      					<button class="btn waves-effect waves-light green center tooltipped" type="submit" name="action"
+                        	data-position="bottom" data-delay="50" data-tooltip="Сменить пароль">
+                        	<i class="material-icons">send</i>
+                    	</button>
+    				</div>
+    			</form>
+  			</div>
+
+  			<script>
+  				$(document).ready(function(){
+    				$('.collapsible').collapsible({
+      					accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    				});
+    				// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    				$('.modal-trigger').leanModal();
+  				});
+
+  			</script>
+
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
