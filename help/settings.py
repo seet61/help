@@ -25,7 +25,7 @@ SECRET_KEY = ')rm&lx9f1s$*i-e@c5zr)a$+83la&xcbkktzrk@8+*^5w0f-z!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["10.61.41.194"]
+ALLOWED_HOSTS = ["127.0.0.1", "10.1.10.110", "10.61.41.194"]
 
 
 # Application definition
@@ -135,10 +135,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = r'C:/GitHub/help/static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
-    ("tasks", "C:/GitHub/help/tasks/static"),
+    ("tasks", os.path.join( os.path.join(BASE_DIR, 'tasks'),'static')),
 )
 
 STATICFILES_FINDERS = [
