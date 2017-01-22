@@ -168,6 +168,7 @@ def search_tasks(request):
 				criterion = request.POST['criterion']
 				#print criterion
 				entries = Tasks.objects.filter(comment__icontains=criterion).filter(login=user).order_by('-activity_date')
+				print entries
 				return render(request, 'tasks/list_tasks.html', {'entries': entries})
 			#except DoesNotExist as e:
 			#	print 'Exception ', e

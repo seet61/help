@@ -25,7 +25,7 @@ SECRET_KEY = ')rm&lx9f1s$*i-e@c5zr)a$+83la&xcbkktzrk@8+*^5w0f-z!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["10.61.41.194"]
 
 
 # Application definition
@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'tasks',
         'USER': 'tasks',
         'PASSWORD': 'tasks',
-        'HOST': '10.1.10.150',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -106,7 +106,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': r'C:/GitHub/help/logs/debug.log',
+            'filename':os.path.join( os.path.join(BASE_DIR, 'logs'),'gebug.log'),
         },
     },
     'loggers': {
@@ -140,3 +140,8 @@ STATIC_ROOT = r'C:/GitHub/help/static'
 STATICFILES_DIRS = (
     ("tasks", "C:/GitHub/help/tasks/static"),
 )
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
