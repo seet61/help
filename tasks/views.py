@@ -6,7 +6,7 @@ from datetime import datetime, date
 from django.contrib.auth.models import User
 #from django.core.exceptions import DoesNotExist
 
-from .models import Tasks, Over_Time
+from .models import Tasks, Over_Time, Works
 import logging
 
 # Get an instance of a logger
@@ -166,15 +166,10 @@ def search_tasks(request):
 			entries = {}
 			try:
 				criterion = request.POST['criterion']
-				#print criterion
 				entries = Tasks.objects.filter(comment__icontains=criterion).filter(login=user).order_by('-activity_date')
 				print entries
 				return render(request, 'tasks/list_tasks.html', {'entries': entries})
-			#except DoesNotExist as e:
-			#	print 'Exception ', e
-			#	return render(request, 'tasks/list_tasks.html', {'entries': entries, 'error': 3})
 			except Exception as e:
-				#print 'Exception ', e
 				logging.DEBUG('criterion %s' % criterion)
 				logging.DEBUG(e)
 				return render(request, 'tasks/list_tasks.html', {'entries': entries, 'error': 2})
@@ -238,7 +233,47 @@ def list_over_time(request):
 
 
 def post_work(request):
-	return render(request, 'tasks/post_work.html')
+	#method to add information about work
+	if request.user.is_authenticated():
+		if request.method == 'POST':
+			print 'request: ', request.body
+			user = request.user
+			try:
+				number = request.POST['number']
+				calendar = request.POST['calendar']
+				calendar = datetime.strptime(calendar, '%d %B, %Y').date()
+				if (request.POST.__contains__('switch_field')):
+					switch_field = True
+				else:
+					switch_field = False
+				installed = request.POST['installed']
+				restarted = request.POST['restarted']
+				passwords = request.POST['passwords']
+				logs = request.POST['log_dirs']
+				if (request.POST.__contains__('call_CC')):
+					call_CC = True
+				else:
+					call_CC = False
+				comment = request.POST['comment']
+				
+				#print user, number, calendar, switch_field, installed, restarted, logs, call_CC, comment
+				try:
+					insert = Works(login=user, activity_date=calendar, field=switch_field,
+							installed=installed, restarted=restarted, passwords_users=passwords, 
+							logs=logs, call_CC=call_CC, comment=comment, number=number)
+					#insert = Over_Time(login=user, activity_date=calendar, comment=comment)
+					insert.save()
+					return render(request, 'tasks/post_work.html', {'entry_saved' : 1})
+				except Exception as e:
+					print 'Exception ', e
+				return render(request, 'tasks/post_work.html', {'entry_saved' : 0})
+			except Exception as e:
+				print 'Exception ', e
+				return render(request, 'tasks/post_work.html', {'entry_saved' : 0})
+		else:
+			return render(request, 'tasks/post_work.html')
+	else:
+		return render(request, 'tasks/post_work.html')
 
 def list_works(request):
 	return render(request, 'tasks/list_works.html')

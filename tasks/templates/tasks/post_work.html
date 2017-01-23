@@ -6,6 +6,15 @@
     <div class="container">
       <div class="section">
         <h5>Добавить информацию о работах</h5>
+        {% if entry_saved == 1 %}
+            <script>
+              Materialize.toast('Запись добавлена.', 4000)
+            </script>
+        {% elif entry_saved == 0 %}
+            <script>
+              Materialize.toast('Запись не добавлена', 4000)
+            </script>
+        {% endif %}
         <div class="row">
             <form class="col s12" id="form" action="{% url 'tasks:post_work' %}" method="post">
             {% csrf_token %}
@@ -20,9 +29,9 @@
                     </div>
                 </div>
                 <div class="switch">
-				    <label>
+				    <label >
 				      LG
-				      <input type="checkbox" value="{{ request.POST.switch_field }}">
+				      <input id="switch_field" name="switch_field" type="checkbox" value="{{ request.POST.switch_field }}">
 				      <span class="lever"></span>
 				      GF
 				    </label>
@@ -51,13 +60,13 @@
 
                 <div class="row">
 			        <div class="input-field col s12">
-			          <input id="log_dirs" type="text" class="validate" value="{{ request.POST.log_dirs }}">
+			          <input id="log_dirs" name="log_dirs" type="text" class="validate" value="{{ request.POST.log_dirs }}">
 			          <label for="log_dirs">Логи</label>
 			        </div>
 			    </div>
 
 			    <p>
-			      <input type="checkbox" id="call_CC" value="{{ request.POST.call_CC }}"/>
+			      <input type="checkbox" id="call_CC" name="call_CC" value="{{ request.POST.call_CC }}">
 			      <label for="call_CC">Звонок в КЦ</label>
 			    </p>
 
