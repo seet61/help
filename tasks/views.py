@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login as auth_login, logout 
+from django.contrib.auth import authenticate, login as auth_login, logout
 from django.shortcuts  import redirect
 from datetime import datetime, date
 from django.contrib.auth.models import User
@@ -56,7 +56,7 @@ def change_password(request):
 			return render(request, 'tasks/settings.html')
 	else:
 		return render(request, 'tasks/login.html')
-	
+
 
 def login(request):
 	#login method
@@ -124,7 +124,7 @@ def post_task(request):
 			return render(request, 'tasks/post_task.html')
 	else:
 		return render(request, 'tasks/login.html')
-	
+
 
 def list_tasks(request):
 	#method for list tasks between days
@@ -183,7 +183,7 @@ def search_tasks(request):
 	else:
 		return render(request, 'tasks/login.html')
 
-	
+
 
 def over_time(request):
 	#method to add over_time
@@ -212,8 +212,8 @@ def over_time(request):
 	else:
 		return render(request, 'tasks/login.html')
 
-		
-	
+
+
 
 def list_over_time(request):
 	#method for list over time between dates
@@ -236,4 +236,9 @@ def list_over_time(request):
 	else:
 		return render(request, 'tasks/login.html')
 
-	
+
+def post_work(request):
+	return render(request, 'tasks/post_work.html')
+
+def list_works(request):
+	return render(request, 'tasks/list_works.html')

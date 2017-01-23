@@ -11,7 +11,7 @@
   <link href="/static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
   <!-- JS -->
-  
+
 </head>
 <body>
 
@@ -28,7 +28,7 @@
         <li><a class="tooltipped" href="{% url 'tasks:settings' %}" data-position="bottom" data-delay="50" data-tooltip="Настройки">
             <i class="material-icons center">settings</i></a></li>
       </ul>
-  
+
       {% if request.user.is_anonymous %}
         <ul id="slide-out" class="side-nav">
           <li><a href="#">Здравстуйте, Гость</a></li>
@@ -41,15 +41,17 @@
           <li><a href="{% url 'tasks:list_tasks' %}">Список активностей</a></li>
           <li><a href="{% url 'tasks:over_time' %}">Переработка</a></li>
           <li><a href="{% url 'tasks:list_over_time' %}">Список переработок</a></li>
+          <li><a href="{% url 'tasks:post_work' %}">Добавить отчет работах</a></li>
+          <li><a href="{% url 'tasks:list_works' %}">Список работ</a></li>
           <li><a href="{% url 'tasks:logout' %}">Выход</a></li>
         </ul>
       {% endif %}
       <a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu"></i></a>
-    
+
 
     </div>
   </nav>
-  
+
   <main>
     <div id="content">
       {% block content %}{% endblock %}
@@ -64,13 +66,13 @@
         <div class="col l6 s12">
           <h5 class="white-text">Tasks</h5>
           <p class="grey-text text-lighten-4">Данный сайт предназначен для упрощенного ведения статистики о проделанной работе сотрудников отдела эксплуатации бизнес-систем Кавказского Филиала МегаФон.</p>
-          <p class="grey-text text-lighten-4">&copy; 2016, Дмитрий Арефьев</p>
+          <p class="grey-text text-lighten-4">&copy; 2016-2017, Дмитрий Арефьев</p>
   </footer>
 
   <script>
     $('.tooltipped').tooltip({delay: 50});
   </script>
 
-  
+
   </body>
 </html>

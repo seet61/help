@@ -1,0 +1,40 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <h5>Добавить информацию о работах 4CAF50</h5>
+        <div class="row">
+            <form class="col s12" id="form" action="{% url 'tasks:post_task' %}" method="post">
+            {% csrf_token %}
+                <div class="switch">
+				    <label>
+				      LG
+				      <input type="checkbox" value="{{ request.POST.switch_field }}">
+				      <span class="lever"></span>
+				      GF
+				    </label>
+				</div>
+
+				<div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="installed" name="installed" class="materialize-textarea" value="{{ request.POST.installed }}"></textarea>
+                        <label for="installed">Комментарий</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light green right tooltipped" type="submit" name="action"
+                        data-position="bottom" data-delay="50" data-tooltip="Добавить?">
+                        <i class="material-icons">note_add</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+{% endblock %}
