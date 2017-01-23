@@ -5,10 +5,20 @@
 <div id="intro" class="section scrollspy">
     <div class="container">
       <div class="section">
-        <h5>Добавить информацию о работах 4CAF50</h5>
+        <h5>Добавить информацию о работах</h5>
         <div class="row">
-            <form class="col s12" id="form" action="{% url 'tasks:post_task' %}" method="post">
+            <form class="col s12" id="form" action="{% url 'tasks:post_work' %}" method="post">
             {% csrf_token %}
+            	<div class="row">
+                    <div class="input-field col s6">
+                        <input id="number" name="number" type="text" class="validate" value="{{ request.POST.number }}" length="9">
+                        <label for="number">Номер</label>
+                    </div>
+                    <div class="col s2">
+                    <label for="calendar">Дата</label>
+                        <input id="calendar" name="calendar" type="date" class="datepicker" value="{{ request.POST.calendar }}">
+                    </div>
+                </div>
                 <div class="switch">
 				    <label>
 				      LG
@@ -21,9 +31,43 @@
 				<div class="row">
                     <div class="input-field col s12">
                         <textarea id="installed" name="installed" class="materialize-textarea" value="{{ request.POST.installed }}"></textarea>
-                        <label for="installed">Комментарий</label>
+                        <label for="installed">Установлено</label>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="restarted" name="restarted" class="materialize-textarea" value="{{ request.POST.restarted }}"></textarea>
+                        <label for="restarted">Перезапущено</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="passwords" name="passwords" class="materialize-textarea" value="{{ request.POST.passwords }}"></textarea>
+                        <label for="passwords">Сменены пароли</label>
+                    </div>
+                </div>
+
+                <div class="row">
+			        <div class="input-field col s12">
+			          <input id="log_dirs" type="text" class="validate" value="{{ request.POST.log_dirs }}">
+			          <label for="log_dirs">Логи</label>
+			        </div>
+			    </div>
+
+			    <p>
+			      <input type="checkbox" id="call_CC" value="{{ request.POST.call_CC }}"/>
+			      <label for="call_CC">Звонок в КЦ</label>
+			    </p>
+
+			    <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="comment" name="comment" class="materialize-textarea" value="{{ request.POST.comment }}"></textarea>
+                        <label for="comment">Комментарий</label>
+                    </div>
+                </div>
+                
                 <div class="row">
                     <button class="btn waves-effect waves-light green right tooltipped" type="submit" name="action"
                         data-position="bottom" data-delay="50" data-tooltip="Добавить?">
