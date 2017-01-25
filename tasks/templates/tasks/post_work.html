@@ -24,7 +24,7 @@
                         <label for="number">Номер</label>
                     </div>
                     <div class="col s2">
-                    <label for="calendar">Дата</label>
+                        <label for="calendar">Дата</label>
                         <input id="calendar" name="calendar" type="date" class="datepicker" value="{{ request.POST.calendar }}">
                     </div>
                 </div>
@@ -65,10 +65,48 @@
 			        </div>
 			    </div>
 
-			    <p>
-			      <input type="checkbox" id="call_CC" name="call_CC" value="{{ request.POST.call_CC }}">
-			      <label for="call_CC">Звонок в КЦ</label>
-			    </p>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="problems" name="problems" class="materialize-textarea" value="{{ request.POST.problems }}"></textarea>
+                        <label for="problems">Выявленные проблемы</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s6">
+                        <div class="section">
+                            <h6>Проверка работоспособности</h6>
+                            <div class="col s4">
+                                <p>
+                                  <input type="checkbox" id="call_CC" name="call_CC" value="{{ request.POST.call_CC }}">
+                                  <label for="call_CC">Звонок в КЦ</label>
+                                </p>
+                            </div>
+                            <div class="col s4">
+                                <label for="timepicker">Время</label>
+                                <input id="timepicker" name="timepicker" class="timepicker" type="time" value="{{ request.POST.timepicker }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="section">
+                            <h6>Оповещения о работах</h6>
+                            <div class="col s4">
+                                <p>
+                                  <input type="checkbox" id="sms" name="sms" value="{{ request.POST.sms }}">
+                                  <label for="sms">WhatsApp</label>
+                                </p>
+                            </div>
+                            <div class="col s4">
+                                <p>
+                                  <input type="checkbox" id="whatsapp" name="whatsapp" value="{{ request.POST.whatsapp }}">
+                                  <label for="whatsapp">Sms</label>
+                                </p>
+                            </div>                            
+                        </div>
+                    </div>                    
+                </div>
+			    
 
 			    <div class="row">
                     <div class="input-field col s12">
