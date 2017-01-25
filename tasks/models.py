@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 # Create your models here.
 
@@ -22,5 +23,9 @@ class Works(models.Model):
 	restarted = models.CharField(max_length=4096)
 	passwords_users = models.CharField(max_length=4096, default='')
 	logs = models.CharField(max_length=1024)
+	problems = models.CharField(max_length=4096, default='')
 	call_CC = models.BooleanField(default=False)
+	time_CC = models.TimeField(default=datetime.time(0))
+	whatsapp = models.BooleanField(default=False)
+	sms = models.BooleanField(default=False)
 	comment = models.CharField(max_length=2048)

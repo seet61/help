@@ -84,7 +84,7 @@
                             </div>
                             <div class="col s4">
                                 <label for="timepicker">Время</label>
-                                <input id="timepicker" name="timepicker" class="timepicker" type="time" value="{{ request.POST.timepicker }}">
+                                <input id="timepicker" name="time_CC" class="timepicker" type="time" value="{{ request.POST.time_CC }}">
                             </div>
                         </div>
                     </div>
@@ -93,14 +93,14 @@
                             <h6>Оповещения о работах</h6>
                             <div class="col s4">
                                 <p>
-                                  <input type="checkbox" id="sms" name="sms" value="{{ request.POST.sms }}">
-                                  <label for="sms">WhatsApp</label>
+                                  <input type="checkbox" id="whatsapp" name="whatsapp" value="{{ request.POST.whatsapp }}">
+                                  <label for="whatsapp">WhatsApp</label>
                                 </p>
                             </div>
                             <div class="col s4">
                                 <p>
-                                  <input type="checkbox" id="whatsapp" name="whatsapp" value="{{ request.POST.whatsapp }}">
-                                  <label for="whatsapp">Sms</label>
+                                  <input type="checkbox" id="sms" name="sms" value="{{ request.POST.sms }}">
+                                  <label for="sms">Sms</label>
                                 </p>
                             </div>                            
                         </div>

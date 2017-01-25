@@ -137,6 +137,8 @@ def list_tasks(request):
 				calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
 				calendar_end = request.POST['calendar_end']
 				calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+				if calendar_start > calendar_end:
+					return render(request, 'tasks/list_tasks.html', {'entries': entries, 'error': 0})	
 				#print user, calendar_start, calendar_end
 				entries = Tasks.objects.filter(login=user).filter(activity_date__range=(calendar_start, calendar_end))
 				changes = []
@@ -221,6 +223,8 @@ def list_over_time(request):
 				calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
 				calendar_end = request.POST['calendar_end']
 				calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+				if calendar_start > calendar_end:
+					return render(request, 'tasks/list_over_time.html', {'entries': entries, 'dates': 0})
 				entries = Over_Time.objects.filter(login=user).filter(activity_date__range=(calendar_start, calendar_end))
 				return render(request, 'tasks/list_over_time.html', {'entries': entries})
 			except Exception as e:
