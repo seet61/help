@@ -244,8 +244,11 @@ def post_work(request):
 			user = request.user
 			try:
 				number = request.POST['number']
-				calendar = request.POST['calendar']
-				calendar = datetime.strptime(calendar, '%d %B, %Y').date()
+				date = request.POST['calendar']
+				if date != '':
+					date = datetime.strptime(date, '%d %B, %Y').date()
+				else:
+					return render(request, 'tasks/post_work.html', {'entry_saved' : 0})
 				if (request.POST.__contains__('switch_field')):
 					switch_field = True
 				else:
@@ -254,26 +257,36 @@ def post_work(request):
 				restarted = request.POST['restarted']
 				passwords = request.POST['passwords']
 				logs = request.POST['log_dirs']
+				problems = request.POST['problems']
 				if (request.POST.__contains__('call_CC')):
 					call_CC = True
 				else:
 					call_CC = False
+				time_CC = request.POST['time_CC']
+				time_CC = datetime.strptime(time_CC, '%H:%M').time()
+				if (request.POST.__contains__('whatsapp')):
+					whatsapp = True
+				else:
+					whatsapp = False
+				if (request.POST.__contains__('sms')):
+					sms = True
+				else:
+					sms = False
 				comment = request.POST['comment']
-				
+				print time_CC
 				#print user, number, calendar, switch_field, installed, restarted, logs, call_CC, comment
 				try:
-					insert = Works(login=user, activity_date=calendar, field=switch_field,
+					insert = Works(login=user, activity_date=date, field=switch_field,
 							installed=installed, restarted=restarted, passwords_users=passwords, 
 							logs=logs, call_CC=call_CC, comment=comment, number=number)
-					#insert = Over_Time(login=user, activity_date=calendar, comment=comment)
 					insert.save()
 					return render(request, 'tasks/post_work.html', {'entry_saved' : 1})
 				except Exception as e:
 					print 'Exception ', e
-				return render(request, 'tasks/post_work.html', {'entry_saved' : 0})
+				return render(request, 'tasks/post_work.html', {'entry_saved' : 2})
 			except Exception as e:
 				print 'Exception ', e
-				return render(request, 'tasks/post_work.html', {'entry_saved' : 0})
+				return render(request, 'tasks/post_work.html', {'entry_saved' : 2})
 		else:
 			return render(request, 'tasks/post_work.html')
 	else:

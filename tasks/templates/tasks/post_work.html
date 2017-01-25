@@ -6,11 +6,15 @@
     <div class="container">
       <div class="section">
         <h5>Добавить информацию о работах</h5>
-        {% if entry_saved == 1 %}
+        {% if entry_saved == 0 %}
+            <script>
+              Materialize.toast('Не выбрана дата проведения работ!', 4000)
+            </script>
+        {% elif entry_saved == 1 %}
             <script>
               Materialize.toast('Запись добавлена.', 4000)
             </script>
-        {% elif entry_saved == 0 %}
+        {% elif entry_saved == 2 %}
             <script>
               Materialize.toast('Запись не добавлена', 4000)
             </script>
