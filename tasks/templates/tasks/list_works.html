@@ -117,7 +117,7 @@
                             <td>{{ e.number }}</td>
                             <td>{{ e.login }}</td>
                             <td>{{ e.activity_date }}</td>
-                            <td>
+                            <td class="center-align">
                                 {% if e.field == False %}
                                     LG
                                 {% else %}    
@@ -167,7 +167,7 @@
                                 {% endif %}
                                 </p>
                             </td>
-                            <td>{{ e.comments }}</td>
+                            <td>{{ e.comment }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
