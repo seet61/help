@@ -7,37 +7,172 @@
       <div class="section">
         <div class="row">
         <h5>Укажите временной промежуток:</h5>
-        {% if dates == 1 %}
+        {% if error == 0 %}
+            <script>
+              Materialize.toast('Не корректно выбраны даты фильтра!', 4000);
+            </script>
+        {% elif error == 1 %}
             <script>
               Materialize.toast('Не выбраны даты фильтра!', 4000);
             </script>
+        {% elif error == 2 %}
+            <script>
+              Materialize.toast('Не задан фильтр поиска!', 4000);
+            </script>
+        {% elif error == 3 %}
+            <script>
+              Materialize.toast('Ничего не найдено.', 4000);
+            </script>
         {% endif %}
-        <form class="col s12" id="form" action="{% url 'tasks:list_works' %}" method="post">
-            {% csrf_token %}
-            <div class="row">
-        		<div class="col s2">
-        			<label for="calendar_start">Дата начала</label>
-        			<input id="calendar_start" name="calendar_start" type="date" class="datepicker" value="{{ request.POST.calendar_start }}">
-        		</div>
-        		<div class="col s2">
-        			<label for="calendar_end">Дата окончания</label>
-        			<input id="calendar_end" name="calendar_end" type="date" class="datepicker" value="{{ request.POST.calendar_end }}">
-        		</div>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s3"><a href="#all_tasks">Найти по фильтру даты</a></li>
+                    <li class="tab col s3"><a href="#search_tasks">Найти по описанию</a></li>
+                </ul>
             </div>
-            <div class="row">
-        		<div class="col s2">
-        			<button class="btn waves-effect waves-light green left tooltipped" 
-                        type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
-                        <i class="material-icons">send</i>
-                    </button>
-            	</div>
-        	</div>
-        </form>
+            <div id="all_tasks" class="col s12">
+                <form class="col s12" id="form" action="{% url 'tasks:list_works' %}" method="post">
+                {% csrf_token %}
+                    <div class="row">
+                        <div class="col s2">
+                            <label for="calendar">Дата начала</label>
+                            <input id="calendar_start" name="calendar_start" type="date" class="datepicker" value="{{ request.POST.calendar_start }}">
+                        </div>
+                        <div class="col s2">
+                            <label for="calendar">Дата окончания</label>
+                            <input id="calendar_end" name="calendar_end" type="date" class="datepicker" value="{{ request.POST.calendar_end }}">
+                        </div>
+                
+                    </div>
+                    <div class="row">
+                        <div class="switch">
+                            <label >
+                                LG
+                                <input id="switch_field" name="switch_field" type="checkbox" value="{{ request.POST.switch_field }}">
+                                <span class="lever"></span>
+                                GF
+                            </label>
+                        </div>    
+
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col s4">
+                            <button class="btn waves-effect waves-light green center tooltipped" 
+                                type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
+                                <i class="material-icons">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="search_tasks" class="col s12">
+                <form class="col s12" id="form" action="{% url 'tasks:search_works' %}" method="post">
+                {% csrf_token %}
+                    <div class="row">
+                        <div class="input-field col s10">
+                            <input id="criterion" name="criterion" type="text" class="validate" value="{{ request.POST.criterion }}" length="50">
+                            <label for="criterion">Критерий поиска</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s4">
+                            <button class="btn waves-effect waves-light green center tooltipped" 
+                                type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
+                                <i class="material-icons">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
 
         <ul>
-        {% for e in entries %}
-        		<li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
-        {% endfor %}
+        {% if works %}
+            <table class="striped bordered">
+                <thead>
+                  <tr>
+                      <th data-field="number">Номер</th>
+                      <th data-field="user">Пользователь</th>
+                      <th data-field="date">Дата</th>
+                      <th data-field="field">Площадка</th>
+                      <th data-field="installed">Установлено</th>
+                      <th data-field="restarted">Перезапущено</th>
+                      <th data-field="passwords">Сменены пароли</th>
+                      <th data-field="logs">Логи</th>
+                      <th data-field="problems">Выявленные проблемы</th>
+                      <th data-field="call_CC">Звонок в КЦ</th>
+                      <th data-field="time_CC">Время звонка</th>
+                      <th data-field="whatsapp">WhatsApp</th>
+                      <th data-field="sms">Sms</th>
+                      <th data-field="comments">Комментарий</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    {% for e in works %}
+                        <tr>
+                            <td>{{ e.number }}</td>
+                            <td>{{ e.login }}</td>
+                            <td>{{ e.activity_date }}</td>
+                            <td>
+                                {% if e.field == False %}
+                                    LG
+                                {% else %}    
+                                    GF
+                                {% endif %}
+                            </td>
+                            <td>{{ e.installed }}</td>
+                            <td>{{ e.restarted }}</td>
+                            <td>{{ e.passwords_users }}</td>
+                            <td>{{ e.logs }}</td>
+                            <td>{{ e.problems }}</td>
+                            <td>
+                                <p class="center-align">
+                                {% if e.call_CC == True %}
+                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
+                                    <label for="filled-in-box"></label>
+                                {% else %}    
+                                    <input type="checkbox" id="test8" disabled="disabled" />
+                                    <label for="test8"></label>
+                                {% endif %}
+                                </p>
+                            </td>
+                            <td>
+                                {% if e.time_CC != "0:00" %}
+                                    {{ e.time_CC }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <p class="center-align">
+                                {% if e.whatsapp == True %}
+                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
+                                    <label for="filled-in-box"></label>
+                                {% else %}    
+                                    <input type="checkbox" id="test8" disabled="disabled" />
+                                    <label for="test8"></label>
+                                {% endif %}
+                                </p>
+                            </td>
+                            <td>
+                                <p class="center-align">
+                                {% if e.sms == True %}
+                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
+                                    <label for="filled-in-box"></label>
+                                {% else %}    
+                                    <input type="checkbox" id="test8" disabled="disabled" />
+                                    <label for="test8"></label>
+                                {% endif %}
+                                </p>
+                            </td>
+                            <td>{{ e.comments }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+        {% endif %}
         </ul>
 
         </div>

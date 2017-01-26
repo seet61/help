@@ -15,4 +15,5 @@ urlpatterns = [
 	url(r'^list_over_time/$', views.list_over_time, name='list_over_time'),
 	url(r'^post_work/$', views.post_work, name='post_work'),
 	url(r'^list_works/$', views.list_works, name='list_works'),
+	url(r'^search_works/$', views.search_works, name='search_works'),
 ]

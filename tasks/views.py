@@ -260,10 +260,11 @@ def post_work(request):
 				problems = request.POST['problems']
 				if (request.POST.__contains__('call_CC')):
 					call_CC = True
+					time_CC = request.POST['time_CC']
+					if time_CC != '':
+						time_CC = datetime.strptime(time_CC, '%H:%M').time()
 				else:
 					call_CC = False
-				time_CC = request.POST['time_CC']
-				time_CC = datetime.strptime(time_CC, '%H:%M').time()
 				if (request.POST.__contains__('whatsapp')):
 					whatsapp = True
 				else:
@@ -273,12 +274,11 @@ def post_work(request):
 				else:
 					sms = False
 				comment = request.POST['comment']
-				print time_CC
-				#print user, number, calendar, switch_field, installed, restarted, logs, call_CC, comment
 				try:
-					insert = Works(login=user, activity_date=date, field=switch_field,
+					insert = Works(number=number, login=user, activity_date=date, field=switch_field,
 							installed=installed, restarted=restarted, passwords_users=passwords, 
-							logs=logs, call_CC=call_CC, comment=comment, number=number)
+							logs=logs, problems=problems, call_CC=call_CC, time_CC=time_CC, 
+							whatsapp=whatsapp, sms=sms, comment=comment)
 					insert.save()
 					return render(request, 'tasks/post_work.html', {'entry_saved' : 1})
 				except Exception as e:
@@ -293,4 +293,36 @@ def post_work(request):
 		return render(request, 'tasks/post_work.html')
 
 def list_works(request):
+	#method for list works between days
+	if request.user.is_authenticated():
+		if request.method == 'POST':
+			user = request.user
+			works = []
+			try:
+				calendar_start = request.POST['calendar_start']
+				calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
+				calendar_end = request.POST['calendar_end']
+				calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+				if (request.POST.__contains__('switch_field')):
+					switch_field = True
+				else:
+					switch_field = False
+				if calendar_start > calendar_end:
+					return render(request, 'tasks/list_works.html', {'works': works, 'error': 0})	
+				works = Works.objects.filter(activity_date__range=(calendar_start, calendar_end)).filter(field=switch_field)
+				return render(request, 'tasks/list_works.html', {'works': works})
+			except Exception as e:
+				print 'Exception ', e
+				return render(request, 'tasks/list_works.html', {'works': works, 'error': 1})
+		else:
+			return render(request, 'tasks/list_works.html')
+	else:
+		return render(request, 'tasks/login.html')
+
+
+
+
+	return render(request, 'tasks/list_works.html')
+
+def search_works(request):
 	return render(request, 'tasks/list_works.html')
