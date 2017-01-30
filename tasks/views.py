@@ -265,6 +265,7 @@ def post_work(request):
 						time_CC = datetime.strptime(time_CC, '%H:%M').time()
 				else:
 					call_CC = False
+					time_CC = datetime.strptime('00:00', '%H:%M').time()
 				if (request.POST.__contains__('whatsapp')):
 					whatsapp = True
 				else:
