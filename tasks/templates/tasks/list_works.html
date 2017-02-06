@@ -91,7 +91,8 @@
 
         <ul>
         {% if works %}
-            <table class="striped bordered">
+            <div class="row">
+                <table class="striped bordered responsive-table">
                 <thead>
                   <tr>
                       <th data-field="number">Номер</th>
@@ -127,12 +128,14 @@
                             <td>{{ e.installed }}</td>
                             <td>{{ e.restarted }}</td>
                             <td>{{ e.passwords_users }}</td>
-                            <td>{{ e.logs }}</td>
+                            <td style="word-wrap: break-word">
+                                {{ e.logs }}
+                            </td>
                             <td>{{ e.problems }}</td>
                             <td>
                                 <p class="center-align">
                                 {% if e.call_CC == True %}
-                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
+                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" disabled="disabled"/>
                                     <label for="filled-in-box"></label>
                                 {% else %}    
                                     <input type="checkbox" id="test8" disabled="disabled" />
@@ -148,7 +151,7 @@
                             <td>
                                 <p class="center-align">
                                 {% if e.whatsapp == True %}
-                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
+                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" disabled="disabled"/>
                                     <label for="filled-in-box"></label>
                                 {% else %}    
                                     <input type="checkbox" id="test8" disabled="disabled" />
@@ -159,7 +162,7 @@
                             <td>
                                 <p class="center-align">
                                 {% if e.sms == True %}
-                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" />
+                                    <input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" disabled="disabled"/>
                                     <label for="filled-in-box"></label>
                                 {% else %}    
                                     <input type="checkbox" id="test8" disabled="disabled" />
@@ -172,6 +175,9 @@
                     {% endfor %}
                 </tbody>
               </table>
+            </div>
+
+            
         {% endif %}
         </ul>
 

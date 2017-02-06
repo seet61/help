@@ -2991,6 +2991,7 @@ td, th {
   table.responsive-table td {
     margin: 0;
     vertical-align: top;
+    word-wrap:break-word;
   }
   table.responsive-table th {
     text-align: left;
@@ -3025,6 +3026,7 @@ td, th {
     display: block;
     min-height: 1.25em;
     text-align: left;
+    word-wrap:break-word;
   }
   table.responsive-table tr {
     padding: 0 10px;
