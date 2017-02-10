@@ -169,7 +169,6 @@ def search_tasks(request):
 			try:
 				criterion = request.POST['criterion']
 				entries = Tasks.objects.filter(comment__icontains=criterion).filter(login=user).order_by('-activity_date')
-				print entries
 				return render(request, 'tasks/list_tasks.html', {'entries': entries})
 			except Exception as e:
 				logging.DEBUG('criterion %s' % criterion)
@@ -197,10 +196,8 @@ def over_time(request):
 						insert.save()
 						return render(request, 'tasks/over_time.html', {'entry_saved' : 1})
 					except Exception as e:
-						print 'Exception ', e
 						return render(request, 'tasks/over_time.html', {'entry_saved' : 0})
 			except Exception as e:
-				print 'Exception ', e
 				return render(request, 'tasks/over_time.html', {'entry_saved' : 0})
 		else:
 			calendar = None
@@ -228,7 +225,6 @@ def list_over_time(request):
 				entries = Over_Time.objects.filter(login=user).filter(activity_date__range=(calendar_start, calendar_end))
 				return render(request, 'tasks/list_over_time.html', {'entries': entries})
 			except Exception as e:
-				print 'Exception ', e
 				return render(request, 'tasks/list_over_time.html', {'entries': entries, 'dates': 1})
 		else:
 			return render(request, 'tasks/list_over_time.html')
@@ -283,10 +279,8 @@ def post_work(request):
 					insert.save()
 					return render(request, 'tasks/post_work.html', {'entry_saved' : 1})
 				except Exception as e:
-					print 'Exception ', e
-				return render(request, 'tasks/post_work.html', {'entry_saved' : 2})
+					return render(request, 'tasks/post_work.html', {'entry_saved' : 2})
 			except Exception as e:
-				print 'Exception ', e
 				return render(request, 'tasks/post_work.html', {'entry_saved' : 2})
 		else:
 			return render(request, 'tasks/post_work.html')
@@ -310,10 +304,9 @@ def list_works(request):
 					switch_field = False
 				if calendar_start > calendar_end:
 					return render(request, 'tasks/list_works.html', {'works': works, 'error': 0})	
-				works = Works.objects.filter(activity_date__range=(calendar_start, calendar_end)).filter(field=switch_field)
+				works = Works.objects.filter(activity_date__range=(calendar_start, calendar_end)).filter(field=switch_field).order_by('-activity_date')
 				return render(request, 'tasks/list_works.html', {'works': works})
 			except Exception as e:
-				print 'Exception ', e
 				return render(request, 'tasks/list_works.html', {'works': works, 'error': 1})
 		else:
 			return render(request, 'tasks/list_works.html')
@@ -326,4 +319,28 @@ def list_works(request):
 	return render(request, 'tasks/list_works.html')
 
 def search_works(request):
+	#search in works by mask of comment
+	if request.user.is_authenticated():
+		if request.method == 'POST':
+			entries = {}
+			try:
+				criterion = request.POST['criterion']
+				works = Works.objects.filter(installed__icontains=criterion).order_by('-activity_date')
+				#works = works.append(Works.objects.filter(restarted__icontains=criterion).order_by('-activity_date'))
+				return render(request, 'tasks/list_works.html', {'works': works})
+			except Exception as e:
+				logging.DEBUG('criterion %s' % criterion)
+				logging.DEBUG(e)
+				return render(request, 'tasks/list_works.html', {'works': works, 'error': 2})
+		else:
+			return render(request, 'tasks/list_works.html')
+	else:
+		return render(request, 'tasks/login.html')
+
+	#return render(request, 'tasks/list_works.html')
+
+def post_to_do(request):
+	return render(request, 'tasks/list_works.html')
+
+def list_to_do(request):
 	return render(request, 'tasks/list_works.html')
