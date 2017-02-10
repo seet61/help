@@ -1,0 +1,118 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <div class="row">
+        <h5>Список задач:</h5>
+        {% if task_saved == 0 %}
+            <script>
+              Materialize.toast('Запись не добавлена.', 4000);
+            </script>
+        {% elif task_saved == 1 %}
+            <script>
+              Materialize.toast('Запись добавлена.', 4000);
+            </script>
+        {% elif task_saved == 2 %}
+            <script>
+              Materialize.toast('Запись(и) с отмечены на как выполненные.', 4000);
+            </script>
+        {% endif %}
+        <div class="row">
+            <!-- Modal Trigger -->
+            <div class="row">
+                <a class="btn-floating btn-large waves-effect waves-light green btn modal-trigger right" href="#add">
+                    <i class="material-icons">add</i>
+                </a>
+            </div>
+
+            <!-- Modal Structure -->
+            <div id="add" class="modal bottom-sheet">
+                <!-- Форма добавления задания -->
+                  <form class="col s12" id="form" action="{% url 'tasks:add_to_do' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-content">
+                            <div class="input-field col s6">
+                            <input id="target" name="target" type="text" class="validate" value="{{ request.POST.target }}">
+                            <label for="target">Что сделать?</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="reason" name="reason" type="text" class="validate" value="{{ request.POST.reason }}">
+                            <label for="reason">Основание (CLM, IM, письмо)</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn waves-effect waves-light green center tooltipped" type="submit" name="action"
+                            data-position="bottom" data-delay="50" data-tooltip="Сменить пароль">
+                            <i class="material-icons">send</i>
+                        </button>
+                    </div>
+                </form>
+                <!--
+                <div class="modal-footer">
+                  <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+                </div>
+                -->
+            </div>
+            
+            <div id="all_tasks" class="col s12">
+                <!-- Форма отображения и редактирования -->
+                <form class="col s12" id="form" action="{% url 'tasks:list_to_do' %}" method="post">
+                {% csrf_token %}
+                    <!-- здесь сделать вывод динамической таблицы данных -->
+                    <ul>
+                        {% if entries %}
+                            <div class="row">
+                                <table class="striped bordered responsive-table">
+                                <thead>
+                                  <tr>
+                                      <th data-field="target">Что сделать</th>
+                                      <th data-field="reason">Основание</th>
+                                      <th data-field="done">Выполнено</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for e in entries %}
+                                        <tr>
+                                            <td id="{{ e.target }}" name="{{ e.target }}" value="">
+                                                {{ e.target }}
+                                            </td>
+                                            <td id="{{ e.reason }}" name="{{ e.reason }}" value="{{ request.POST.{{ e.reason }} }}">
+                                                {{ e.reason }}
+                                            </td>
+                                            <td>
+                                                <p class="center-align">
+                                                    <input type="checkbox" class="filled-in" id="{{ e.target }}_checkbox" />
+                                                    <label for="{{ e.target }}_checkbox"></label>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                              </table>
+                            </div>
+
+                            
+                        {% endif %}
+                        </ul>
+
+                </form>
+            </div>
+
+
+             
+
+        </div>
+
+    
+        </div>
+
+
+      </div>
+    </div>
+</div>
+
+{% endblock %}

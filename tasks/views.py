@@ -339,8 +339,11 @@ def search_works(request):
 
 	#return render(request, 'tasks/list_works.html')
 
-def post_to_do(request):
-	return render(request, 'tasks/list_works.html')
+def add_to_do(request):
+	return render(request, 'tasks/list_to_do.html')
+
+def edit_to_do(request):
+	return render(request, 'tasks/list_to_do.html')
 
 def list_to_do(request):
-	return render(request, 'tasks/list_works.html')
+	return render(request, 'tasks/list_to_do.html')

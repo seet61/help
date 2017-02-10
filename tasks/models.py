@@ -29,3 +29,10 @@ class Works(models.Model):
 	whatsapp = models.BooleanField(default=False)
 	sms = models.BooleanField(default=False)
 	comment = models.CharField(max_length=2048)
+
+class ToDo(models.Model):
+	target = models.CharField(max_length=2048)
+	reason = models.CharField(max_length= 32)
+	#duedate = models.DateField(db_index=True)
+	finished = models.BooleanField(db_index=True)
+		
