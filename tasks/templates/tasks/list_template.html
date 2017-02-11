@@ -1,0 +1,48 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+
+<div id="intro" class="section scrollspy">
+    <div class="container">
+      <div class="section">
+        <div class="row">
+        <h5>Список задач:</h5>
+        {% if entry_saved == 0 %}
+            <script>
+              Materialize.toast('Запись не добавлена.', 4000);
+            </script>
+        {% elif entry_saved == 1 %}
+            <script>
+              Materialize.toast('Запись добавлена.', 4000);
+            </script>
+        {% elif entry_saved == 2 %}
+            <script>
+              Materialize.toast('Запись(и) отмечены как выполненные.', 4000);
+            </script>
+        {% endif %}
+        {% if error == 0 %}
+            <script>
+              Materialize.toast('Не корректно выбраны даты фильтра!', 4000);
+            </script>
+        {% elif error == 1 %}
+            <script>
+              Materialize.toast('Не выбраны даты фильтра!', 4000);
+            </script>
+        {% elif error == 2 %}
+            <script>
+              Materialize.toast('Не задан фильтр поиска!', 4000);
+            </script>
+        {% elif error == 3 %}
+            <script>
+              Materialize.toast('Ничего не найдено.', 4000);
+            </script>
+        {% endif %}
+        <div class="row">
+            {% block list %} {% endblock %}
+        </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

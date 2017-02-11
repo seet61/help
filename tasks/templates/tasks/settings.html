@@ -35,6 +35,10 @@
           						<input id="current_password" name="current_password" type="password" class="validate">
           						<label for="current_password">Старый пароль</label>
         					</div>
+                  <div class="col s2">
+                    <label for="calendar">Дата</label>
+                        <input id="calendar" name="calendar" type="date" class="datepicker" value="{{ request.POST.calendar }}">
+                  </div>
       					</div>
       					<div class="row">
         					<div class="input-field col s6">
