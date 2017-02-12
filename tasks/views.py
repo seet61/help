@@ -207,17 +207,17 @@ def over_time(request):
                         insert = Over_Time(login=user, activity_date=calendar, comment=comment)
                         insert.save()
                         logging.info('Overtime for %s was saved' % user)
-                        return render(request, 'tasks/over_time.html', {'entry_saved' : 1})
+                        return render(request, 'tasks/list_over_time.html', {'entry_saved' : 1})
                     except Exception as e:
                         logging.info('Overtime for %s wasn''t saved' % user)
                         logger.error(e)
-                        return render(request, 'tasks/over_time.html', {'entry_saved' : 0})
+                        return render(request, 'tasks/list_over_time.html', {'entry_saved' : 0})
             except Exception as e:
                 return render(request, 'tasks/over_time.html', {'entry_saved' : 0})
         else:
             calendar = None
             comment = None
-            return render(request, 'tasks/over_time.html')
+            return render(request, 'tasks/list_over_time.html')
     else:
         return render(request, 'tasks/login.html')
 
@@ -232,7 +232,12 @@ def list_over_time(request):
                 calendar_start = request.POST['calendar_start']
                 calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
                 calendar_end = request.POST['calendar_end']
-                calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+                print len(calendar_end)
+                if len(calendar_end) > 0:
+                    calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+                else:
+                    calendar_end = datetime.today().date()               
+                print calendar_start, calendar_end
                 if calendar_start > calendar_end:
                     return render(request, 'tasks/list_over_time.html', {'entries': entries, 'dates': 0})
                 entries = Over_Time.objects.filter(login=user).filter(activity_date__range=(calendar_start, calendar_end))
@@ -389,7 +394,7 @@ def edit_to_do(request):
             if '_checkbox' in key:
                 try:
                     key = key.split('_checkbox')[0]
-                    print key
+                    #print key
                     logger.info('Update entry %s ' % key)
                     ToDo.objects.filter(target=key).update(finished=True)
                     #todo.finished=True

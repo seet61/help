@@ -1,52 +1,74 @@
-{% extends "tasks/base.html" %}
+{% extends "tasks/list_template.html" %}
 
-{% block content %}
-
-<div id="intro" class="section scrollspy">
-    <div class="container">
-      <div class="section">
+{% block list %}
+<h5>Список переработок:</h5>
+<div class="row">
+<div id="all_over_time" class="col s10">
+    <form class="col s12" id="form" action="{% url 'tasks:list_over_time' %}" method="post">
+    {% csrf_token %}
         <div class="row">
-        <h5>Укажите временной промежуток:</h5>
-        {% if dates == 0 %}
-            <script>
-              Materialize.toast('Не корректно выбраны даты фильтра!', 4000);
-            </script>
-        {% elif dates == 1 %}
-            <script>
-              Materialize.toast('Не выбраны даты фильтра!', 4000);
-            </script>
-        {% endif %}
-        <form class="col s12" id="form" action="{% url 'tasks:list_over_time' %}" method="post">
-            {% csrf_token %}
-            <div class="row">
-        		<div class="col s2">
-        			<label for="calendar_start">Дата начала</label>
-        			<input id="calendar_start" name="calendar_start" type="date" class="datepicker" value="{{ request.POST.calendar_start }}">
-        		</div>
-        		<div class="col s2">
-        			<label for="calendar_end">Дата окончания</label>
-        			<input id="calendar_end" name="calendar_end" type="date" class="datepicker" value="{{ request.POST.calendar_end }}">
-        		</div>
+            <div class="col s2">
+                <label for="calendar_start">Дата начала</label>
+                <input id="calendar_start" name="calendar_start" type="date" class="datepicker" value="{{ request.POST.calendar_start }}">
             </div>
-            <div class="row">
-        		<div class="col s2">
-        			<button class="btn waves-effect waves-light green left tooltipped" 
-                        type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
-                        <i class="material-icons">send</i>
-                    </button>
-            	</div>
-        	</div>
-        </form>
-
-        <ul>
-        {% for e in entries %}
-        		<li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
-        {% endfor %}
-        </ul>
-
+            <div class="col s2">
+                <label for="calendar_end">Дата окончания</label>
+                <input id="calendar_end" name="calendar_end" type="date" class="datepicker" value="{{ request.POST.calendar_end }}">
+            </div>
         </div>
-      </div>
-    </div>
+        <div class="row">
+            <div class="col s2">
+                <button class="btn waves-effect waves-light green left tooltipped" 
+                    type="submit" name="action" data-position="bottom" data-delay="50" data-tooltip="Выбрать?">
+                    <i class="material-icons">send</i>
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 
+<div class="col s2">
+    <!-- Modal Trigger -->
+    <div class="row">
+        <a class="btn-floating btn-large waves-effect waves-light green btn modal-trigger right" href="#add">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+</div>
+</div>
+<!-- Modal Structure -->
+<div id="add" class="modal modal-fixed-footer">
+    <!-- Форма добавления задания -->
+    <form class="col s12" id="form" action="{% url 'tasks:over_time' %}" method="post">
+        {% csrf_token %}
+        <div class="modal-content">
+            <div class="row">
+                <div class="col s2">
+                    <label for="calendar">Дата</label>
+                    <input id="calendar" name="calendar" type="date" class="datepicker" value="{{ request.POST.calendar }}">
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="comment" name="comment" class="materialize-textarea" value="{{ request.POST.comment }}"></textarea>
+                        <label for="comment">Комментарий</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn waves-effect waves-light green center tooltipped" type="submit" name="action"
+                data-position="bottom" data-delay="50" data-tooltip="Добавить?">
+                    <i class="material-icons">note_add</i>
+        </button>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <ul>
+        {% for e in entries %}
+            <li>{{ e.number }} {{ e.activity_date }} {{ e.comment }}
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
