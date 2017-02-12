@@ -19,6 +19,10 @@
             <script>
               Materialize.toast('Запись(и) отмечены как выполненные.', 4000);
             </script>
+        {% elif entry_saved == 3 %}
+            <script>
+              Materialize.toast('Запись(и) не отмечены как выполненные!', 4000);
+            </script>
         {% endif %}
         {% if error == 0 %}
             <script>

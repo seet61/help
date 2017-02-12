@@ -38,19 +38,21 @@ def change_password(request):
                 print current_password, new_password, confirm_password
                 if (new_password == confirm_password):
                     print new_password == confirm_password
-                    #user = authenticate(username=user, password=current_password)
-                    #print user
+                    logger.info('Changing password for %s' % user)
                     if ((authenticate(username=user, password=current_password)) is not None):
                         u = User.objects.get(username=user)
                         u.set_password(new_password)
                         u.save()
                         return render(request, 'tasks/settings.html', {'password_changed' : 1})
                     else:
+                        logger.error('Bad data for changing password for %s' % user)
                         return render(request, 'tasks/settings.html', {'bad_data' : 1})
                 else:
+                    logger.error('Bad cofirm for changing password for %s' % user)
                     return render(request, 'tasks/settings.html', {'bad_confirm' : 1})
             except Exception as e:
-                #logging.DEBUG(e)
+                logger.error('Bad data for changing password for %s' % user)
+                logger.error(e.message)
                 return render(request, 'tasks/settings.html', {'bad_data' : 1})
         else:
             return render(request, 'tasks/settings.html')
@@ -83,6 +85,7 @@ def login(request):
 def logout_view(request):
     #logout method
     if request.user.is_authenticated():
+        logging.info('User %s is logout' % user)
         logout(request)
         return render(request, 'tasks/login.html')
     else:
@@ -102,20 +105,25 @@ def post_task(request):
                 if (number is not None) and (calendar is not None) and (comment is not None) :
                     try:
                         entry = Tasks.objects.filter(number=number).filter(login=user)
-                        print 'len ', len(entry)
+                        #print 'len ', len(entry)
                         if len(entry) != 0:
                             return render(request, 'tasks/post_task.html', {'task_saved' : 2})
                         else:
                             insert = Tasks(number=number, login=user, activity_date=calendar, comment=comment)
                             insert.save()
+                            logger.info('Task %s was saved for user %s' % (number, user))
                             return render(request, 'tasks/post_task.html', {'task_saved' : 1})
                     except Exception as e:
-                        print 'Exception ', e
+                        #print 'Exception ', e
+                        logger.error('Task %s was saved for user %s, %s, %s' % (number, user, calendar, comment))
+                        logger.error(e)
                         return render(request, 'tasks/post_task.html', {'task_saved' : 0})
                 else:
                     return render(request, 'tasks/post_task.html')
             except Exception as e:
-                print 'Exception ', e
+                #print 'Exception ', e
+                logger.error('Task %s wasn''t saved for user %s, %s, %s' % (number, user, calendar, comment))
+                logger.error(e)
                 return render(request, 'tasks/post_task.html', {'task_saved' : 0})
         else:
             number = None
@@ -151,9 +159,12 @@ def list_tasks(request):
                         queries.append(entry)
                     else:
                         others.append(entry)
+                logger.info('List tasks for user %s' % user)
                 return render(request, 'tasks/list_tasks.html', {'changes': changes, 'queries':queries , 'others':others})
             except Exception as e:
-                print 'Exception ', e
+                #print 'Exception ', e
+                logger.error('Cann''t get list of tasks for %s' % user)
+                logger.error(e)
                 return render(request, 'tasks/list_tasks.html', {'entries': entries, 'error': 1})
         else:
             return render(request, 'tasks/list_tasks.html')
@@ -168,17 +179,18 @@ def search_tasks(request):
             entries = {}
             try:
                 criterion = request.POST['criterion']
+                logger.info('Searching task for criterion: %s' % criterion)
                 entries = Tasks.objects.filter(comment__icontains=criterion).filter(login=user).order_by('-activity_date')
                 return render(request, 'tasks/list_tasks.html', {'entries': entries})
             except Exception as e:
                 logging.DEBUG('criterion %s' % criterion)
                 logging.DEBUG(e)
+                logger.error(e)
                 return render(request, 'tasks/list_tasks.html', {'entries': entries, 'error': 2})
         else:
             return render(request, 'tasks/list_tasks.html')
     else:
         return render(request, 'tasks/login.html')
-
 
 
 def over_time(request):
@@ -194,8 +206,11 @@ def over_time(request):
                     try:
                         insert = Over_Time(login=user, activity_date=calendar, comment=comment)
                         insert.save()
+                        logging.info('Overtime for %s was saved' % user)
                         return render(request, 'tasks/over_time.html', {'entry_saved' : 1})
                     except Exception as e:
+                        logging.info('Overtime for %s wasn''t saved' % user)
+                        logger.error(e)
                         return render(request, 'tasks/over_time.html', {'entry_saved' : 0})
             except Exception as e:
                 return render(request, 'tasks/over_time.html', {'entry_saved' : 0})
@@ -205,8 +220,6 @@ def over_time(request):
             return render(request, 'tasks/over_time.html')
     else:
         return render(request, 'tasks/login.html')
-
-
 
 
 def list_over_time(request):
@@ -223,8 +236,11 @@ def list_over_time(request):
                 if calendar_start > calendar_end:
                     return render(request, 'tasks/list_over_time.html', {'entries': entries, 'dates': 0})
                 entries = Over_Time.objects.filter(login=user).filter(activity_date__range=(calendar_start, calendar_end))
+                logger.info('List overtime for %s' % user)
                 return render(request, 'tasks/list_over_time.html', {'entries': entries})
             except Exception as e:
+                logger.error('Cann''t get list of overtime for %s' % user)
+                logger.error(e)
                 return render(request, 'tasks/list_over_time.html', {'entries': entries, 'dates': 1})
         else:
             return render(request, 'tasks/list_over_time.html')
@@ -276,10 +292,15 @@ def post_work(request):
                             logs=logs, problems=problems, call_CC=call_CC, time_CC=time_CC, 
                             whatsapp=whatsapp, sms=sms, comment=comment)
                     insert.save()
+                    logger.info('Work for %s was saved' % user)
                     return render(request, 'tasks/post_work.html', {'entry_saved' : 1})
                 except Exception as e:
+                    logger.error('Cann''t save work for %s' % user)
+                    logger.error(e)
                     return render(request, 'tasks/post_work.html', {'entry_saved' : 2})
             except Exception as e:
+                logger.error('Cann''t save work for %s' % user)
+                logger.error(e)
                 return render(request, 'tasks/post_work.html', {'entry_saved' : 2})
         else:
             return render(request, 'tasks/post_work.html')
@@ -302,10 +323,14 @@ def list_works(request):
                 else:
                     switch_field = False
                 if calendar_start > calendar_end:
+                    logger.warning('Can''t get list of works for %s, because %s more than %s' % (user. calendar_start, calendar_end))
                     return render(request, 'tasks/list_works.html', {'works': works, 'error': 0})   
                 works = Works.objects.filter(activity_date__range=(calendar_start, calendar_end)).filter(field=switch_field).order_by('-activity_date')
+                logger.info('List works for %s' % user)
                 return render(request, 'tasks/list_works.html', {'works': works})
             except Exception as e:
+                logger.error('Cann''t get list of works for %s' % user)
+                logger.error(e)
                 return render(request, 'tasks/list_works.html', {'works': works, 'error': 1})
         else:
             return render(request, 'tasks/list_works.html')
@@ -321,10 +346,12 @@ def search_works(request):
                 criterion = request.POST['criterion']
                 works = Works.objects.filter(installed__icontains=criterion).order_by('-activity_date')
                 #works = works.append(Works.objects.filter(restarted__icontains=criterion).order_by('-activity_date'))
+                logger.info('Search works for %s with criterion: %s' % (user, criterion))
                 return render(request, 'tasks/list_works.html', {'works': works})
             except Exception as e:
                 logging.DEBUG('criterion %s' % criterion)
                 logging.DEBUG(e)
+                logger.error(e)
                 return render(request, 'tasks/list_works.html', {'works': works, 'error': 2})
         else:
             return render(request, 'tasks/list_works.html')
@@ -341,8 +368,11 @@ def add_to_do(request):
                 try:
                     insert = ToDo(target=target, reason=reason)
                     insert.save()
+                    logger.info('Add %s in to do list' % target)
                     return redirect('/tasks/list_to_do', {'entry_saved' : 1})
                 except Exception as e:
+                    logger.error('Cann''t add %s in to do list' % target)
+                    logger.error(e)
                     return redirect('/tasks/list_to_do', {'entry_saved' : 2})
             except Exception as e:
                 return redirect('/tasks/list_to_do', {'entry_saved' : 2})
@@ -353,13 +383,29 @@ def add_to_do(request):
     
 
 def edit_to_do(request):
-    for key, value in request.POST.iteritems():
-        if '_checkbox' in key:
-            print key
-    return redirect('/tasks/list_to_do', {'entry_saved' : 1})
+    #method for edit list to do
+    if request.user.is_authenticated():
+        for key, value in request.POST.iteritems():
+            if '_checkbox' in key:
+                try:
+                    key = key.split('_checkbox')[0]
+                    print key
+                    logger.info('Update entry %s ' % key)
+                    ToDo.objects.filter(target=key).update(finished=True)
+                    #todo.finished=True
+                    #todo.save()
+                    logger.info('Entry to do %s was marked as finished' % key)
+                except Exception as e:
+                    logger.error('Entry to do %s wasn''t marked as finished' % key)
+                    logger.error(e)
+                    print e
+                    return redirect('/tasks/list_to_do', {'entry_saved' : 3})
+        return redirect('/tasks/list_to_do', {'entry_saved' : 2})
+    else:
+        return render(request, 'tasks/login.html')
 
 def list_to_do(request):
-    #method for list works between days
+    #method for list to do
     if request.user.is_authenticated():
         entries = []
         try:
