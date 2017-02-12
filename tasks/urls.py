@@ -20,4 +20,5 @@ urlpatterns = [
 	url(r'^add_to_do/$', views.add_to_do, name='add_to_do'),
 	url(r'^edit_to_do/$', views.edit_to_do, name='edit_to_do'),
 	url(r'^list_to_do/$', views.list_to_do, name='list_to_do'),
+	url(r'^list_to_do/(?P<entry_saved>\d+)$', views.list_to_do, name='list_to_do'),
 ]

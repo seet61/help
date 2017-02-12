@@ -374,15 +374,15 @@ def add_to_do(request):
                     insert = ToDo(target=target, reason=reason)
                     insert.save()
                     logger.info('Add %s in to do list' % target)
-                    return redirect('/tasks/list_to_do', {'entry_saved' : 1})
+                    return redirect('/tasks/list_to_do/1')
                 except Exception as e:
                     logger.error('Cann''t add %s in to do list' % target)
                     logger.error(e)
-                    return redirect('/tasks/list_to_do', {'entry_saved' : 2})
+                    return redirect('/tasks/list_to_do/0')
             except Exception as e:
-                return redirect('/tasks/list_to_do', {'entry_saved' : 2})
-        else:
-            return render(request, 'tasks/list_to_do.html')
+                logger.error('Cann''t add %s in to do list' % target)
+                logger.error(e)
+                return redirect('/tasks/list_to_do/0')
     else:
         return render(request, 'tasks/list_to_do.html')
     
@@ -397,25 +397,23 @@ def edit_to_do(request):
                     #print key
                     logger.info('Update entry %s ' % key)
                     ToDo.objects.filter(target=key).update(finished=True)
-                    #todo.finished=True
-                    #todo.save()
                     logger.info('Entry to do %s was marked as finished' % key)
                 except Exception as e:
                     logger.error('Entry to do %s wasn''t marked as finished' % key)
                     logger.error(e)
                     print e
-                    return redirect('/tasks/list_to_do', {'entry_saved' : 3})
-        return redirect('/tasks/list_to_do', {'entry_saved' : 2})
+                    return redirect('/tasks/list_to_do/3')
+        return redirect('/tasks/list_to_do/2')
     else:
         return render(request, 'tasks/login.html')
 
-def list_to_do(request):
+def list_to_do(request, entry_saved=''):
     #method for list to do
     if request.user.is_authenticated():
         entries = []
         try:
             todos = ToDo.objects.filter(finished=False)
-            return render(request, 'tasks/list_to_do.html', {'entries': todos})
+            return render(request, 'tasks/list_to_do.html', {'entries': todos, 'entry_saved': int(entry_saved)})
         except Exception as e:
             return render(request, 'tasks/list_to_do.html', {'entries': todos, 'error': 1})
     else:
