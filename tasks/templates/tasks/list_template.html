@@ -29,7 +29,7 @@
             </script>
         {% elif error == 1 %}
             <script>
-              Materialize.toast('Не выбраны даты фильтра!', 4000);
+              Materialize.toast('Необходимо выбрать хотя бы дату начала!', 4000);
             </script>
         {% elif error == 2 %}
             <script>
@@ -38,6 +38,10 @@
         {% elif error == 3 %}
             <script>
               Materialize.toast('Ничего не найдено.', 4000);
+            </script>
+        {% elif error == 4 %}
+            <script>
+              Materialize.toast('Не удалось загрузить данные.', 4000);
             </script>
         {% endif %}
         <div class="row">

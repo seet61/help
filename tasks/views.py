@@ -233,7 +233,7 @@ def list_over_time(request):
                 calendar_start = request.POST['calendar_start']
                 calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
                 calendar_end = request.POST['calendar_end']
-                print len(calendar_end)
+                #print len(calendar_end)
                 if len(calendar_end) > 0:
                     calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
                 else:
@@ -247,7 +247,7 @@ def list_over_time(request):
             except Exception as e:
                 logger.error('Cann''t get list of overtime for %s' % user)
                 logger.error(e)
-                return render(request, 'tasks/list_over_time.html', {'entries': entries, 'dates': 1})
+                return render(request, 'tasks/list_over_time.html', {'entries': entries, 'error': 1})
         else:
             return render(request, 'tasks/list_over_time.html')
     else:
@@ -324,6 +324,10 @@ def list_works(request):
                 calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
                 calendar_end = request.POST['calendar_end']
                 calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+                if len(calendar_end) > 0:
+                    calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+                else:
+                    calendar_end = datetime.today().date()               
                 if (request.POST.__contains__('switch_field')):
                     switch_field = True
                 else:
@@ -402,13 +406,12 @@ def edit_to_do(request):
                 except Exception as e:
                     logger.error('Entry to do %s wasn''t marked as finished' % key)
                     logger.error(e)
-                    print e
                     return redirect('/tasks/list_to_do/3')
         return redirect('/tasks/list_to_do/2')
     else:
         return render(request, 'tasks/login.html')
 
-def list_to_do(request, entry_saved=''):
+def list_to_do(request, entry_saved=-1):
     #method for list to do
     if request.user.is_authenticated():
         entries = []
@@ -416,7 +419,9 @@ def list_to_do(request, entry_saved=''):
             todos = ToDo.objects.filter(finished=False)
             return render(request, 'tasks/list_to_do.html', {'entries': todos, 'entry_saved': int(entry_saved)})
         except Exception as e:
-            return render(request, 'tasks/list_to_do.html', {'entries': todos, 'error': 1})
+            logger.error('Can''t load list to do')
+            logger.error(e)
+            return render(request, 'tasks/list_to_do.html', {'entries': todos, 'error': 4})
     else:
         return render(request, 'tasks/login.html')
     
