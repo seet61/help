@@ -145,7 +145,10 @@ def list_tasks(request):
                 calendar_start = request.POST['calendar_start']
                 calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
                 calendar_end = request.POST['calendar_end']
-                calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+                if len(calendar_end) > 0:
+                    calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
+                else:
+                    calendar_end = datetime.today().date() 
                 if calendar_start > calendar_end:
                     return render(request, 'tasks/list_tasks.html', {'entries': entries, 'error': 0})   
                 #print user, calendar_start, calendar_end
@@ -323,7 +326,6 @@ def list_works(request):
                 calendar_start = request.POST['calendar_start']
                 calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
                 calendar_end = request.POST['calendar_end']
-                calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
                 if len(calendar_end) > 0:
                     calendar_end = datetime.strptime(calendar_end, '%d %B, %Y').date()
                 else:

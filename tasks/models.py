@@ -33,5 +33,7 @@ class Works(models.Model):
 class ToDo(models.Model):
 	target = models.CharField(max_length=2048)
 	reason = models.CharField(max_length= 32)
+	startdate = models.DateField(db_index=True, default=datetime.datetime.today())
+	enddate = models.DateField(db_index=True, default=datetime.datetime.today())
 	finished = models.BooleanField(default=False, db_index=True)
 		

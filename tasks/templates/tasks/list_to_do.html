@@ -13,8 +13,8 @@
     <!-- Форма добавления задания -->
     <form class="col s12" id="form" action="{% url 'tasks:add_to_do' %}" method="post">
         {% csrf_token %}
-        <div class="row">
-            <div class="modal-content">
+        <div class="modal-content">
+            <div class="row">
                 <div class="input-field col s6">
                     <input id="target" name="target" type="text" class="validate" value="{{ request.POST.target }}">
                     <label for="target">Что сделать?</label>
@@ -24,16 +24,16 @@
                     <label for="reason">Основание (CLM, IM, письмо)</label>
                 </div>
             </div>  
-        </div>
-        <div class="row">
-            <div class="col s4">
-                <label for="calendar">Дата возникновения</label>
-                <input id="startdate" name="startdate" type="date" class="datepicker" value="{{ request.POST.startdate }}">
-            </div>
-            <div class="col s4">
-                <label for="calendar">Выполнить до</label>
-                <input id="startdate" name="startdate" type="date" class="datepicker" value="{{ request.POST.startdate }}">
-            </div>
+            <div class="row">
+                <div class="col s6">
+                    <label for="calendar">Дата возникновения</label>
+                    <input id="startdate" name="startdate" type="date" class="datepicker" value="{{ request.POST.startdate }}">
+                </div>
+                <div class="col s6">
+                    <label for="calendar">Выполнить до</label>
+                    <input id="enddate" name="enddate" type="date" class="datepicker" value="{{ request.POST.enddate }}">
+                </div>
+            </div> 
         </div>
         <div class="modal-footer">
             <button class="btn waves-effect waves-light green center tooltipped" type="submit" name="action"
