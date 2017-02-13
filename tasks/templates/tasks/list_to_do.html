@@ -57,6 +57,8 @@
                             <tr>
                                 <th data-field="target">Что сделать</th>
                                 <th data-field="reason">Основание</th>
+                                <th data-field="reason">Дата ворзникновения</th>
+                                <th data-field="reason">Выполнить до</th>
                                 <th data-field="done">Выполнено</th>
                             </tr>
                         </thead>
@@ -69,6 +71,12 @@
                                     </td>
                                     <td id="{{ e.reason }}" name="{{ e.reason }}" value="{{ request.POST.e.reason }}">
                                         {{ e.reason }}
+                                    </td>
+                                    <td id="{{ e.startdate }}" name="{{ e.startdate }}" value="{{ request.POST.e.startdate }}">
+                                        {{ e.startdate }}
+                                    </td>
+                                    <td id="{{ e.enddate }}" name="{{ e.enddate }}" value="{{ request.POST.e.enddate }}">
+                                        {{ e.enddate }}
                                     </td>
                                     <td>
                                         <p class="center-align">

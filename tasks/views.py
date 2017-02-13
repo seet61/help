@@ -377,14 +377,25 @@ def add_to_do(request):
             try:
                 target = request.POST['target']
                 reason = request.POST['reason']
+                startdate = request.POST['startdate']
+                if len(startdate) > 0:
+                    startdate = datetime.strptime(startdate, '%d %B, %Y').date()
+                else:
+                    startdate = datetime.today().date()     
+                enddate = request.POST['enddate']
+                if len(enddate) > 0:
+                    enddate = datetime.strptime(enddate, '%d %B, %Y').date()
+                else:
+                    enddate = datetime.today().date()    
                 try:
-                    insert = ToDo(target=target, reason=reason)
+                    insert = ToDo(target=target, reason=reason, startdate=startdate, enddate=enddate)
                     insert.save()
                     logger.info('Add %s in to do list' % target)
                     return redirect('/tasks/list_to_do/1')
                 except Exception as e:
                     logger.error('Cann''t add %s in to do list' % target)
                     logger.error(e)
+                    print e.decode('utf8')
                     return redirect('/tasks/list_to_do/0')
             except Exception as e:
                 logger.error('Cann''t add %s in to do list' % target)
