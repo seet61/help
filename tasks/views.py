@@ -395,7 +395,7 @@ def add_to_do(request):
                 except Exception as e:
                     logger.error('Cann''t add %s in to do list' % target)
                     logger.error(e)
-                    print e.decode('utf8')
+                    #print e.decode('utf8')
                     return redirect('/tasks/list_to_do/0')
             except Exception as e:
                 logger.error('Cann''t add %s in to do list' % target)
@@ -429,7 +429,7 @@ def list_to_do(request, entry_saved=-1):
     if request.user.is_authenticated():
         entries = []
         try:
-            todos = ToDo.objects.filter(finished=False)
+            todos = ToDo.objects.filter(finished=False).order_by('enddate')
             return render(request, 'tasks/list_to_do.html', {'entries': todos, 'entry_saved': int(entry_saved)})
         except Exception as e:
             logger.error('Can''t load list to do')
