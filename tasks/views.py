@@ -85,6 +85,7 @@ def login(request):
 def logout_view(request):
     #logout method
     if request.user.is_authenticated():
+        user = request.user
         logging.info('User %s is logout' % user)
         logout(request)
         return render(request, 'tasks/login.html')
