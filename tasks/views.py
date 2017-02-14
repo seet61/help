@@ -101,6 +101,7 @@ def post_task(request):
             try:
                 number = request.POST['number']
                 calendar = request.POST['calendar']
+                print calendar
                 calendar = datetime.strptime(calendar, '%d %B, %Y').date()
                 comment = request.POST['comment']
                 if (number is not None) and (calendar is not None) and (comment is not None) :
@@ -156,6 +157,7 @@ def list_tasks(request):
                 changes = []
                 queries = []
                 others = []
+                #print entries
                 for entry in entries:
                     if entry.number[0] == 'C':
                         changes.append(entry)
@@ -169,7 +171,7 @@ def list_tasks(request):
                 #print 'Exception ', e
                 logger.error('Cann''t get list of tasks for %s' % user)
                 logger.error(e)
-                return render(request, 'tasks/list_tasks.html', {'entries': entries, 'error': 1})
+                return render(request, 'tasks/list_tasks.html', {'error': 1})
         else:
             return render(request, 'tasks/list_tasks.html')
     else:

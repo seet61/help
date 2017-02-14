@@ -84,6 +84,9 @@ DATABASES = {
         'PASSWORD': 'tasks',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+        'TEST': {
+            'NAME': 'test_tasks',
+        },
     }
 }
 
@@ -216,7 +219,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_STORAGE = ['django.contrib.staticfiles.storage.StaticFilesStorage',]
+#STATICFILES_STORAGE = ['django.contrib.staticfiles.storage.StaticFilesStorage',]
 
 STATICFILES_DIRS = (
     ("tasks", os.path.join( os.path.join(BASE_DIR, 'tasks'),'static')),
