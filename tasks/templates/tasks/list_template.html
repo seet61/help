@@ -22,6 +22,10 @@
             <script>
               Materialize.toast('Запись(и) не отмечены как выполненные!', 4000);
             </script>
+        {% elif entry_saved == 4 %}
+            <script>
+              Materialize.toast('Запись с таким номер для вашего логина уже существует.', 4000);
+            </script>
         {% endif %}
         {% if error == 0 %}
             <script>

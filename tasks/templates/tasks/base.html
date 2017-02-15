@@ -40,7 +40,6 @@
         <!-- Меню -->
         <ul id="slide-out" class="side-nav">
           <li><a href="#">Здравстуйте, {{ request.user }}</a></li>
-          <li><a href="{% url 'tasks:post_task' %}">Добавить активность</a></li>
           <li><a href="{% url 'tasks:list_tasks' %}">Список активностей</a></li>
           <li><a href="{% url 'tasks:list_over_time' %}">Список переработок</a></li>
           <li><a href="{% url 'tasks:post_work' %}">Добавить отчет работах</a></li>

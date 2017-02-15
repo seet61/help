@@ -109,39 +109,38 @@ def post_task(request):
                         entry = Tasks.objects.filter(number=number).filter(login=user)
                         #print 'len ', len(entry)
                         if len(entry) != 0:
-                            return render(request, 'tasks/post_task.html', {'task_saved' : 2})
+                            #return render(request, 'tasks/post_task.html', {'task_saved' : 2})
+                            return redirect('/tasks/list_tasks/4')
                         else:
                             insert = Tasks(number=number, login=user, activity_date=calendar, comment=comment)
                             insert.save()
                             logger.info('Task %s was saved for user %s' % (number, user))
-                            return render(request, 'tasks/post_task.html', {'task_saved' : 1})
+                            #return render(request, 'tasks/post_task.html', {'task_saved' : 1})
+                            return redirect('/tasks/list_tasks/1')
                     except Exception as e:
                         #print 'Exception ', e
                         logger.error('Task %s was saved for user %s, %s, %s' % (number, user, calendar, comment))
                         logger.error(e)
-                        return render(request, 'tasks/post_task.html', {'task_saved' : 0})
+                        #return render(request, 'tasks/post_task.html', {'task_saved' : 0})
+                        return redirect('/tasks/list_tasks/0')
                 else:
-                    return render(request, 'tasks/post_task.html')
+                    #return render(request, 'tasks/post_task.html')
+                    return redirect('/tasks/list_tasks/0')
             except Exception as e:
                 #print 'Exception ', e
                 logger.error('Task %s wasn''t saved for user %s, %s, %s' % (number, user, calendar, comment))
                 logger.error(e)
-                return render(request, 'tasks/post_task.html', {'task_saved' : 0})
-        else:
-            number = None
-            calendar = None
-            comment = None
-            return render(request, 'tasks/post_task.html')
+                #return render(request, 'tasks/post_task.html', {'task_saved' : 0})
+                return redirect('/tasks/list_tasks/0')
     else:
         return render(request, 'tasks/login.html')
 
 
-def list_tasks(request):
+def list_tasks(request, entry_saved=-1):
     #method for list tasks between days
     if request.user.is_authenticated():
         if request.method == 'POST':
             user = request.user
-            entries = {}
             try:
                 calendar_start = request.POST['calendar_start']
                 calendar_start = datetime.strptime(calendar_start, '%d %B, %Y').date()
@@ -168,12 +167,11 @@ def list_tasks(request):
                 logger.info('List tasks for user %s' % user)
                 return render(request, 'tasks/list_tasks.html', {'changes': changes, 'queries':queries , 'others':others})
             except Exception as e:
-                #print 'Exception ', e
                 logger.error('Cann''t get list of tasks for %s' % user)
                 logger.error(e)
                 return render(request, 'tasks/list_tasks.html', {'error': 1})
         else:
-            return render(request, 'tasks/list_tasks.html')
+            return render(request, 'tasks/list_tasks.html', {'entry_saved': int(entry_saved)})
     else:
         return render(request, 'tasks/login.html')
 

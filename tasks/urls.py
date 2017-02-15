@@ -11,6 +11,7 @@ urlpatterns = [
 	url(r'^logout/$', views.logout_view, name='logout'),
 	url(r'^post_task/$', views.post_task, name='post_task'),
 	url(r'^list_tasks/$', views.list_tasks, name='list_tasks'),
+	url(r'^list_tasks/(?P<entry_saved>\d+)$', views.list_tasks, name='list_tasks'),
 	url(r'^search_tasks/$', views.search_tasks, name='search_tasks'),
 	url(r'^over_time/$', views.over_time, name='over_time'),
 	url(r'^list_over_time/$', views.list_over_time, name='list_over_time'),
