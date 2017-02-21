@@ -110,28 +110,39 @@ def post_task(request):
                         #print 'len ', len(entry)
                         if len(entry) != 0:
                             #return render(request, 'tasks/post_task.html', {'task_saved' : 2})
-                            return redirect('/tasks/list_tasks/4')
+                            #return redirect('/tasks/list_tasks/4')
+			    #return redirect(list_tasks, entry_saved='4')
+			    #url = reverse('list_tasks', args=(), kwargs={'entry_saved': '4'})
+                	    #return HttpResponseRedirect(url)
+			    return redirect('tasks:list_tasks', entry_saved='4')
                         else:
                             insert = Tasks(number=number, login=user, activity_date=calendar, comment=comment)
                             insert.save()
                             logger.info('Task %s was saved for user %s' % (number, user))
                             #return render(request, 'tasks/post_task.html', {'task_saved' : 1})
-                            return redirect('/tasks/list_tasks/1')
+                            #return redirect('tasks/list_tasks/1')
+			    #return redirect('/list_tasks', entry_saved='1')
+			    return redirect('tasks:list_tasks', entry_saved='1')
                     except Exception as e:
                         #print 'Exception ', e
                         logger.error('Task %s was saved for user %s, %s, %s' % (number, user, calendar, comment))
                         logger.error(e)
                         #return render(request, 'tasks/post_task.html', {'task_saved' : 0})
-                        return redirect('/tasks/list_tasks/0')
+                        #return redirect('tasks/list_tasks/0')
+			#return redirect('list_tasks', entry_saved='0')
+			return redirect('tasks:list_tasks', entry_saved='0')
                 else:
                     #return render(request, 'tasks/post_task.html')
-                    return redirect('/tasks/list_tasks/0')
+                    #return redirect('tasks/list_tasks/0')
+		    #return redirect('list_tasks', entry_saved='0')
+		    return redirect('tasks:list_tasks', entry_saved='0')
             except Exception as e:
                 #print 'Exception ', e
                 logger.error('Task %s wasn''t saved for user %s, %s, %s' % (number, user, calendar, comment))
                 logger.error(e)
                 #return render(request, 'tasks/post_task.html', {'task_saved' : 0})
-                return redirect('/tasks/list_tasks/0')
+                #return redirect('tasks/list_tasks/0')
+		return redirect('tasks:list_tasks', entry_saved='0')
     else:
         return render(request, 'tasks/login.html')
 
@@ -391,16 +402,19 @@ def add_to_do(request):
                     insert = ToDo(target=target, reason=reason, startdate=startdate, enddate=enddate)
                     insert.save()
                     logger.info('Add %s in to do list' % target)
-                    return redirect('/tasks/list_to_do/1')
+                    #return redirect('/tasks/list_to_do/1')
+		    return redirect('tasks:list_to_do', entry_saved='1')
                 except Exception as e:
                     logger.error('Cann''t add %s in to do list' % target)
                     logger.error(e)
                     #print e.decode('utf8')
-                    return redirect('/tasks/list_to_do/0')
+                    #return redirect('/tasks/list_to_do/0')
+		    return redirect('tasks:list_to_do', entry_saved='0')
             except Exception as e:
                 logger.error('Cann''t add %s in to do list' % target)
                 logger.error(e)
-                return redirect('/tasks/list_to_do/0')
+                #return redirect('/tasks/list_to_do/0')
+		return redirect('tasks:list_to_do', entry_saved='0')
     else:
         return render(request, 'tasks/list_to_do.html')
     
@@ -419,8 +433,10 @@ def edit_to_do(request):
                 except Exception as e:
                     logger.error('Entry to do %s wasn''t marked as finished' % key)
                     logger.error(e)
-                    return redirect('/tasks/list_to_do/3')
-        return redirect('/tasks/list_to_do/2')
+                    #return redirect('/tasks/list_to_do/3')
+		    return redirect('tasks:list_to_do', entry_saved='3')
+        #return redirect('/tasks/list_to_do/2')
+	return redirect('tasks:list_to_do', entry_saved='2')
     else:
         return render(request, 'tasks/login.html')
 
@@ -438,3 +454,4 @@ def list_to_do(request, entry_saved=-1):
     else:
         return render(request, 'tasks/login.html')
     
+
