@@ -54,13 +54,14 @@ v.0.1:
 
 
 Настройка в связке с apache.
-1. Настроить mod_wsgi
-2. Пример измений/добавлений в конфигурации apache:
-LoadModule wsgi_module modules/mod_wsgi.so
-
+1. http://ntischuk.com/2012/02/05/python-apache-install-mod_wsgi-on-windows/
+2. Установка whl: pip install *.whl
+3. Добавить в httpd.conf LoadModule wsgi_module modules/mod_wsgi.so
+4. Пример измений/добавлений в конфигурации apache:
 #WSGI block
 WSGIScriptAlias /help "C:/GitHub/help/help/wsgi.py"
-WSGIPythonPath "C:/GitHub/help"
+WSGIPythonPath "C:/Python27"
+WSGIPythonHome "C:/Python27" 
 Alias /static/ "C:/GitHub/help/static/"
 
 <Directory "C:/GitHub/help/help">
@@ -68,13 +69,13 @@ Alias /static/ "C:/GitHub/help/static/"
 	Allow from all
 <Files wsgi.py>
 	Allow from all
-</Files>
+</Files>                 o
 </Directory>
 
 <Directory "C:/GitHub/help/static/">
 	Allow from all
 </Directory>
-3. Перезапустить apache.
+5. Перезапустить Apache.
 
 Сбор статических файлов:
 python manage.py collectstatic
